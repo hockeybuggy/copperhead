@@ -1,3 +1,6 @@
+mod vm;
+mod frame;
+
 #[cfg(test)]
 mod tests {
     #[test]

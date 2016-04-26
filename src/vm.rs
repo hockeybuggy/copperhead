@@ -1,13 +1,5 @@
 #[allow(non_camel_case_types)] // To match the python opcodes
-
-struct Frame {
-    data_stack: Vec<i64>,
-    block_stack: Vec<i64>,
-}
-
-
-// Thing to create new frames
-// Create instruction 'class'
+use frame::Frame;
 
 #[derive(Debug)]
 pub enum Opcodes {
@@ -19,8 +11,7 @@ pub enum Opcodes {
 }
 
 pub struct VirtualMachine {
-    // stack: Vec<Frame>, TODO switch to i64
-    stack: Vec<i64>,
+    stack: Vec<Frame>,
 }
 
 impl VirtualMachine {
@@ -35,6 +26,11 @@ impl VirtualMachine {
                consts: Vec<i64>,
                varnames: Vec<&'static str>
               ) {
+
+        println!("Pushing Frame");
+        let mut main = Frame::new();
+        self.stack.push(main);
+
         println!("Running instructions: {:?}", instructions);
         for i in &instructions {
             println!("{:?}", i);
@@ -48,12 +44,21 @@ impl VirtualMachine {
         }
     }
 
+    fn curr_frame(&self) -> &mut Frame {
+        let opt: Option<&mut Frame> = self.stack.get_mut(self.stack.len());
+        let curr: &mut Frame = match opt {
+            Some(ref result) => *result,
+            None => panic!("Can't pop"),
+        };
+        return curr;
+    }
+
     fn push(&mut self, datum: i64) {
-        self.stack.push(datum);
+        self.curr_frame().push(datum);
     }
 
     fn pop(&mut self) -> i64 {
-        let opt: Option<i64> = self.stack.pop();
+        let opt: Option<i64> = self.curr_frame().pop();
         let a: i64 = match opt {
             Some(ref result) => *result,
             None => panic!("Can't pop"),
@@ -71,7 +76,7 @@ impl VirtualMachine {
         // pop 2 off stack, add them and push result
         let a: i64 = self.pop();
         let b: i64 = self.pop();
-        self.stack.push(a + b);
+        self.push(a + b);
     }
 
     fn print_item(&mut self) {
@@ -91,7 +96,7 @@ impl VirtualMachine {
         // take variable from stash and push it on the stack
         let varname: &'static str = varnames[datum_index];
         let datum: i64 = 1; // TODO get from stack frame
-        self.stack.push(datum);
+        self.push(datum);
         println!("Loading {:?}", varname);
     }
 }

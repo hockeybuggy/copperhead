@@ -1,5 +1,4 @@
 #[allow(non_camel_case_types)] // To match the python opcodes
-mod vm;
 use vm::VirtualMachine;
 
 
