@@ -10,7 +10,7 @@ fn main() {
     let instructions = vec!(
         (vm::Opcodes::LOAD_VALUE, 0),
         (vm::Opcodes::LOAD_VALUE, 1),
-        (vm::Opcodes::BINARAY_ADD, 0),
+        (vm::Opcodes::BINARY_ADD, 0),
         (vm::Opcodes::PRINT_ITEM, 0),
         );
 

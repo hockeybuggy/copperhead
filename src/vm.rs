@@ -12,7 +12,7 @@ struct Frame {
 #[derive(Debug)]
 pub enum Opcodes {
     LOAD_VALUE,
-    BINARAY_ADD,
+    BINARY_ADD,
     PRINT_ITEM,
 }
 
@@ -34,7 +34,7 @@ impl VirtualMachine {
             println!("{:?}", i);
             match i.0 {
                 Opcodes::LOAD_VALUE => self.load_value(&data, i.1),
-                Opcodes::BINARAY_ADD => self.binary_add(),
+                Opcodes::BINARY_ADD => self.binary_add(),
                 Opcodes::PRINT_ITEM => self.print_item(),
             }
         }
