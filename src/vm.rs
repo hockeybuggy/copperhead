@@ -39,7 +39,7 @@ impl VirtualMachine {
         for i in &instructions {
             println!("{:?}", i);
             match i.0 {
-                Opcodes::LOAD_CONST => self.load_value(&consts, i.1),
+                Opcodes::LOAD_CONST => self.load_const(&consts, i.1),
                 Opcodes::BINARY_ADD => self.binary_add(),
                 Opcodes::PRINT_ITEM => self.print_item(),
                 Opcodes::STORE_FAST => self.store_fast(&varnames, i.1),
@@ -48,7 +48,7 @@ impl VirtualMachine {
         }
     }
 
-    pub fn load_value(&mut self, consts: &Vec<i64>, datum_index: usize) {
+    pub fn load_const(&mut self, consts: &Vec<i64>, datum_index: usize) {
         // push off stack
         let datum: i64 = consts[datum_index];
         self.stack.push(datum);
