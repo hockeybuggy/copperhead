@@ -48,34 +48,35 @@ impl VirtualMachine {
         }
     }
 
-    pub fn load_const(&mut self, consts: &Vec<i64>, datum_index: usize) {
-        // push off stack
-        let datum: i64 = consts[datum_index];
+    pub fn push(&mut self, datum: i64) {
         self.stack.push(datum);
+    }
+
+    pub fn pop(&mut self) -> i64 {
+        let opt: Option<i64> = self.stack.pop();
+        let a: i64 = match opt {
+            Some(ref result) => *result,
+            None => panic!("Can't pop"),
+        };
+        return a;
+    }
+
+    pub fn load_const(&mut self, consts: &Vec<i64>, datum_index: usize) {
+        // push a constant onto the stack
+        let datum: i64 = consts[datum_index];
+        self.push(datum);
     }
 
     pub fn binary_add(&mut self) {
         // pop 2 off stack, add them and push result
-        let x: Option<i64> = self.stack.pop();
-        let y: Option<i64> = self.stack.pop();
-        let a = match x {
-            Some(ref j) => j,
-            None => panic!("Can't pop"),
-        };
-        let b = match y {
-            Some(ref j) => j,
-            None => panic!("Can't pop"),
-        };
+        let a: i64 = self.pop();
+        let b: i64 = self.pop();
         self.stack.push(a + b);
     }
 
     pub fn print_item(&mut self) {
         // pop 1 off stack and print it
-        let x: Option<i64> = self.stack.pop();
-        let a = match x {
-            Some(ref j) => j,
-            None => panic!("Can't pop"),
-        };
+        let a: i64 = self.pop();
         println!("{:?}", a);
     }
 
@@ -83,7 +84,7 @@ impl VirtualMachine {
         // pop 1 off stack and stash it
         let varname: &'static str = varnames[datum_index];
         // TODO put it in the stack frame
-        println!("Loading {:?}", varnames);
+        println!("Storing {:?}", varname);
     }
 
     pub fn load_fast(&mut self, varnames: &Vec<&'static str>, datum_index: usize) {
@@ -91,6 +92,6 @@ impl VirtualMachine {
         let varname: &'static str = varnames[datum_index];
         let datum: i64 = 1; // TODO get from stack frame
         self.stack.push(datum);
-        println!("Loading {:?}", varnames);
+        println!("Loading {:?}", varname);
     }
 }

@@ -6,6 +6,7 @@ use vm::VirtualMachine;
 fn main() {
     // x = 5
     // print x
+
     let consts: Vec<i64> = vec!(7, 5);
     let varnames: Vec<&'static str> = vec!("x");
     let instructions = vec!(
@@ -17,7 +18,9 @@ fn main() {
 
 
     // print 7 + 5
+
     // let consts: Vec<i64> = vec!(7, 5);
+    // let varnames: Vec<&'static str> = vec!();
     // let instructions = vec!(
     //     (vm::Opcodes::LOAD_CONST, 0),
     //     (vm::Opcodes::LOAD_CONST, 1),
