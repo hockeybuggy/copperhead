@@ -11,7 +11,9 @@ struct Frame {
 
 #[derive(Debug)]
 pub enum Opcodes {
-    LOAD_VALUE,
+    LOAD_CONST,
+    STORE_FAST,
+    LOAD_FAST,
     BINARY_ADD,
     PRINT_ITEM,
 }
@@ -28,21 +30,27 @@ impl VirtualMachine {
         }
     }
 
-    pub fn run(&mut self, instructions: Vec<(Opcodes, usize)>, data: Vec<i64>) {
+    pub fn run(&mut self,
+               instructions: Vec<(Opcodes, usize)>,
+               consts: Vec<i64>,
+               varnames: Vec<&'static str>
+              ) {
         println!("Running instructions: {:?}", instructions);
         for i in &instructions {
             println!("{:?}", i);
             match i.0 {
-                Opcodes::LOAD_VALUE => self.load_value(&data, i.1),
+                Opcodes::LOAD_CONST => self.load_value(&consts, i.1),
                 Opcodes::BINARY_ADD => self.binary_add(),
                 Opcodes::PRINT_ITEM => self.print_item(),
+                Opcodes::STORE_FAST => self.store_fast(&varnames, i.1),
+                Opcodes::LOAD_FAST => self.load_fast(&varnames, i.1),
             }
         }
     }
 
-    pub fn load_value(&mut self, data: &Vec<i64>, datum_index: usize) {
+    pub fn load_value(&mut self, consts: &Vec<i64>, datum_index: usize) {
         // push off stack
-        let datum: i64 = data[datum_index];
+        let datum: i64 = consts[datum_index];
         self.stack.push(datum);
     }
 
@@ -69,5 +77,20 @@ impl VirtualMachine {
             None => panic!("Can't pop"),
         };
         println!("{:?}", a);
+    }
+
+    pub fn store_fast(&mut self, varnames: &Vec<&'static str>, datum_index: usize) {
+        // pop 1 off stack and stash it
+        let varname: &'static str = varnames[datum_index];
+        // TODO put it in the stack frame
+        println!("Loading {:?}", varnames);
+    }
+
+    pub fn load_fast(&mut self, varnames: &Vec<&'static str>, datum_index: usize) {
+        // take variable from stash and push it on the stack
+        let varname: &'static str = varnames[datum_index];
+        let datum: i64 = 1; // TODO get from stack frame
+        self.stack.push(datum);
+        println!("Loading {:?}", varnames);
     }
 }
