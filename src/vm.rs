@@ -48,11 +48,11 @@ impl VirtualMachine {
         }
     }
 
-    pub fn push(&mut self, datum: i64) {
+    fn push(&mut self, datum: i64) {
         self.stack.push(datum);
     }
 
-    pub fn pop(&mut self) -> i64 {
+    fn pop(&mut self) -> i64 {
         let opt: Option<i64> = self.stack.pop();
         let a: i64 = match opt {
             Some(ref result) => *result,
@@ -61,33 +61,33 @@ impl VirtualMachine {
         return a;
     }
 
-    pub fn load_const(&mut self, consts: &Vec<i64>, datum_index: usize) {
+    fn load_const(&mut self, consts: &Vec<i64>, datum_index: usize) {
         // push a constant onto the stack
         let datum: i64 = consts[datum_index];
         self.push(datum);
     }
 
-    pub fn binary_add(&mut self) {
+    fn binary_add(&mut self) {
         // pop 2 off stack, add them and push result
         let a: i64 = self.pop();
         let b: i64 = self.pop();
         self.stack.push(a + b);
     }
 
-    pub fn print_item(&mut self) {
+    fn print_item(&mut self) {
         // pop 1 off stack and print it
         let a: i64 = self.pop();
         println!("{:?}", a);
     }
 
-    pub fn store_fast(&mut self, varnames: &Vec<&'static str>, datum_index: usize) {
+    fn store_fast(&mut self, varnames: &Vec<&'static str>, datum_index: usize) {
         // pop 1 off stack and stash it
         let varname: &'static str = varnames[datum_index];
         // TODO put it in the stack frame
         println!("Storing {:?}", varname);
     }
 
-    pub fn load_fast(&mut self, varnames: &Vec<&'static str>, datum_index: usize) {
+    fn load_fast(&mut self, varnames: &Vec<&'static str>, datum_index: usize) {
         // take variable from stash and push it on the stack
         let varname: &'static str = varnames[datum_index];
         let datum: i64 = 1; // TODO get from stack frame
