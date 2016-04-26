@@ -1,4 +1,4 @@
-# Simple Interpreter.
+# Copperhead
 
 I am taking a crack at writing a simple interpreter that uses something similar
 to python byte code. Completely a toy project for practice.
@@ -11,4 +11,3 @@ to python byte code. Completely a toy project for practice.
 - [ ] Other operators
 - [ ] Conditionals
 - [ ] Function calling sequence
-
